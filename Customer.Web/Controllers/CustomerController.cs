@@ -15,7 +15,11 @@ namespace Customer.Web.Controllers
         {
             return View();
         }
-        public CustomerRepository ct = new CustomerRepository();
+        private ICustomerRepository customerrepository;
+        public CustomerController(ICustomerRepository customerrepository)
+        {
+            this.customerrepository = customerrepository;
+        }
         public IActionResult CustomerMain()
         {
             string user = HttpContext.Session.GetString("user");
@@ -25,33 +29,33 @@ namespace Customer.Web.Controllers
             }
             else
             {
-                var cu = ct.GetData();
+                var cu = customerrepository.GetData();
                 return View(cu);
             }
         }
         [HttpPost]
         public IActionResult Create(CustomerDetail cu)
         {
-            ct.InsertData(cu);
-            ct.SaveData();
+            customerrepository.InsertData(cu);
+            customerrepository.SaveData();
             return RedirectToAction("CustomerMain");
         }
         [HttpPost]
         public IActionResult Edit(CustomerDetail cu)
         {
-            ct.UpdateData(cu);
-            ct.SaveData();
+            customerrepository.UpdateData(cu);
+            customerrepository.SaveData();
             return RedirectToAction("CustomerMain");
         }
         public JsonResult Detail(int id)
         {
-            var cu = ct.SelectDataById(id);
+            var cu = customerrepository.SelectDataById(id);
             return Json(cu);
         }  
         public IActionResult Delete(int id)
         {
-            ct.DeleteData(id);
-            ct.SaveData();
+            customerrepository.DeleteData(id);
+            customerrepository.SaveData();
             return RedirectToAction("CustomerMain");
         }
         public IActionResult Logout()

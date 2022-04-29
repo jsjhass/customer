@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Customer.Data.Models;
+using Customer.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Customer.Web
@@ -25,6 +26,9 @@ namespace Customer.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<CustomerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CustomerConnection")));
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddSession();
         }
 

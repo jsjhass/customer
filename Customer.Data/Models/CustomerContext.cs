@@ -9,9 +9,9 @@ namespace Customer.Data.Models
 {
     public class CustomerContext:DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
+        public CustomerContext(DbContextOptions<CustomerContext> options):base(options)
         {
-            optionsbuilder.UseSqlServer("Server=ASUS; Initial Catalog=Customer; Integrated Security=true;");
+
         }
         public DbSet<CustomerDetail> CustomerDetails { get; set; }
         public DbSet<UserDetail> UserDetails { get; set; }

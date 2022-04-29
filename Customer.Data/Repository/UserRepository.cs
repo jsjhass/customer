@@ -8,12 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Customer.Data.Repository
 {
-    public class UserRepository
+    public class UserRepository:IUserRepository
     {
-        private CustomerContext db = new CustomerContext();
+        private CustomerContext context;
+        private DbSet<UserDetail> db;
+        public UserRepository(CustomerContext context)
+        {
+            this.context = context;
+            db = context.Set<UserDetail>();
+        }
         public bool LoginUser(UserDetail ud)
         {
-            var u = (from m in db.UserDetails where m.UserName == ud.UserName && m.Password == ud.Password select m).FirstOrDefault();
+            var u = (from m in context.UserDetails where m.UserName == ud.UserName && m.Password == ud.Password select m).FirstOrDefault();
             if(u!=null)
             {
                 return true;

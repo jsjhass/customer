@@ -14,13 +14,11 @@ namespace Customer.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private IUserRepository userrepository;
+        public HomeController(IUserRepository userrepository)
         {
-            _logger = logger;
+            this.userrepository = userrepository;
         }
-        public UserRepository ur = new UserRepository();
         public IActionResult Index()
         {
             return View();
@@ -28,7 +26,7 @@ namespace Customer.Web.Controllers
         [HttpPost]
         public IActionResult Index(UserDetail ud)
         {
-            bool r=ur.LoginUser(ud);
+            bool r=userrepository.LoginUser(ud);
             if(r==true)
             {
                 HttpContext.Session.SetString("user", ud.UserName);
@@ -39,7 +37,7 @@ namespace Customer.Web.Controllers
                 ModelState.AddModelError("", "Invalid Username / Password");
                 return View();
             }
-            
+           
         }
         public IActionResult Privacy()
         {

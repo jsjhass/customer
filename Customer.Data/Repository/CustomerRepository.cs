@@ -8,35 +8,41 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Customer.Data.Repository
 {
-    public class CustomerRepository
+    public class CustomerRepository:ICustomerRepository
     {
-        private CustomerContext db = new CustomerContext();
+        private CustomerContext context;
+        private DbSet<CustomerDetail> db;
+        public CustomerRepository(CustomerContext context)
+        {
+            this.context = context;
+            db = context.Set<CustomerDetail>();
+        }
         public IEnumerable<CustomerDetail> GetData()
         { 
-            var c=db.CustomerDetails;
+            var c=context.CustomerDetails;
             return c;
         }
         public CustomerDetail SelectDataById(int id)
         {
-            var c=db.CustomerDetails.Find(id);
+            var c=context.CustomerDetails.Find(id);
             return c;
         }
         public void InsertData(CustomerDetail cu)
         {
-            db.CustomerDetails.Add(cu);
+            context.CustomerDetails.Add(cu);
         }
         public void UpdateData(CustomerDetail cu)
         {
-            db.CustomerDetails.Update(cu);
+            context.CustomerDetails.Update(cu);
         }
         public void DeleteData(int id)
         {
-            CustomerDetail cu = db.CustomerDetails.Find(id);
-            db.CustomerDetails.Remove(cu);
+            CustomerDetail cu = context.CustomerDetails.Find(id);
+            context.CustomerDetails.Remove(cu);
         }
         public void SaveData()
         {
-            db.SaveChanges();
+            context.SaveChanges();
         }
     }
 }
